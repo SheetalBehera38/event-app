@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Events</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #f4f6f8;
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    a {
+      text-decoration: none;
+      color: white;
+      background: #007bff;
+      padding: 8px 12px;
+      border-radius: 5px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      background: white;
+      margin: 10px auto;
+      padding: 15px;
+      width: 300px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>Event Management</h1>
+<a href="create.html">+ Create Event</a>
+
+<ul id="list"></ul>
+
+<script>
+fetch("/events")
+  .then(res => res.json())
+  .then(data => {
+    const list = document.getElementById("list");
+
+    data.forEach(e => {
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <h3>${e.title}</h3>
+        <p>${e.date}</p>
+        <a href="event.html?id=${e.id}">View</a>
+      `;
+      list.appendChild(li);
+    });
+  });
+</script>
+
+</body>
+</html>

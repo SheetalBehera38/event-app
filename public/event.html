@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Event Details</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #f4f6f8;
+      text-align: center;
+    }
+
+    #event {
+      background: white;
+      padding: 20px;
+      margin: 20px auto;
+      width: 320px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    input {
+      padding: 8px;
+      margin: 8px;
+      width: 220px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 10px 15px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+
+<body>
+
+<h2>Event Details</h2>
+
+<div id="event">Loading...</div>
+
+<h3>Register</h3>
+
+<input id="name" placeholder="Enter your name"><br>
+<input id="email" placeholder="Enter your email"><br>
+<button onclick="register()">Register</button>
+
+<script>
+// Get ID from URL
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
+
+// Get inputs
+const nameInput = document.getElementById("name");
+const emailInput = document.getElementById("email");
+
+// Load event details
+if (!id) {
+  document.getElementById("event").innerHTML = "Event not found";
+} else {
+  fetch(`/events/${id}`)
+    .then(res => res.json())
+    .then(e => {
+      document.getElementById("event").innerHTML = `
+        <h3>${e.title}</h3>
+        <p><b>Date:</b> ${e.date}</p>
+        <p><b>Type:</b> ${e.type}</p>
+        <p>${e.description}</p>
+      `;
+    });
+}
+
+// Register user
+async function register() {
+  if (!id) {
+    alert("Event ID missing");
+    return;
+  }
+
+  if (!nameInput.value || !emailInput.value) {
+    alert("All fields required");
+    return;
+  }
+
+  const res = await fetch("/register", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      eventId: id,
+      name: nameInput.value,
+      email: emailInput.value
+    })
+  });
+
+  const data = await res.json();
+
+  if (data.error) {
+    alert(data.error);
+  } else {
+    alert("Registered successfully!");
+  }
+}
+</script>
+
+</body>
+</html>
