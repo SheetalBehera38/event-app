@@ -70,5 +70,5 @@ node server.js
 
 ##   Live Demo
 
-[Click here to open the app](https://event-app-sgbv.onrender.com)
+https://event-app-sqbv.onrender.com
 
