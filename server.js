@@ -29,19 +29,23 @@ app.post("/events", (req, res) => {
   res.json(event);
 });
 
-// GET EVENTS
+// GET ALL EVENTS
 app.get("/events", (req, res) => {
   res.json(events);
 });
 
-// EVENT DETAILS
+// GET EVENT DETAILS
 app.get("/events/:id", (req, res) => {
   const event = events.find(e => e.id == req.params.id);
-  if (!event) return res.status(404).json({ error: "Not found" });
+
+  if (!event) {
+    return res.status(404).json({ error: "Event not found" });
+  }
+
   res.json(event);
 });
 
-// REGISTER
+// REGISTER USER
 app.post("/register", (req, res) => {
   const { eventId, name, email } = req.body;
 
@@ -62,16 +66,14 @@ app.post("/register", (req, res) => {
   res.json({ message: "Registered successfully" });
 });
 
-app.listen(3000, () => {
-  console.log("Server running on http://localhost:3000");
-});
+// ROOT ROUTE (IMPORTANT)
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/public/index.html");
 });
+
+// SERVER START
 const PORT = process.env.PORT || 3000;
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/public/index.html");
-});
+
 app.listen(PORT, () => {
   console.log("Server running");
 });
